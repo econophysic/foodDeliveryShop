@@ -2,7 +2,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // Tabs
 
-    let tabs = document.querySelectorAll('.tabheader__item'),
+    const tabs = document.querySelectorAll('.tabheader__item'),
         tabsContent = document.querySelectorAll('.tabcontent'),
         tabsParent = document.querySelector('.tabheader__items');
 
@@ -31,7 +31,7 @@ window.addEventListener('DOMContentLoaded', function() {
         const target = event.target;
         if(target && target.classList.contains('tabheader__item')) {
             tabs.forEach((item, i) => {
-                if (target == item) {
+                if (target === item) {
                     hideTabContent();
                     showTabContent(i);
                 }
@@ -119,7 +119,7 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     modal.addEventListener('click', (e) => {
-        if (e.target === modal || e.target.getAttribute ('data-close') == "") {
+        if (e.target === modal || e.target.getAttribute ('data-close') === "") {
             closeModal();
         }
     });
@@ -217,7 +217,8 @@ window.addEventListener('DOMContentLoaded', function() {
     const message = {
         loading: 'img/form/spinner.svg',
         success: 'Спасибо! Скоро мы с вами свяжемся',
-        failure: 'Что-то пошло не так...'
+        failure: 'Что-то пошло не так...',
+        wrongNumber: 'Номер введен с ошибкой'
     };
 
     forms.forEach(item => {
@@ -242,35 +243,36 @@ window.addEventListener('DOMContentLoaded', function() {
             request.open('POST', 'server.php');
             request.setRequestHeader('Content-type', 'application/json; charset=utf-8');//for JSON
             const formData = new FormData(form);
+            /*Check true or false number*/
+            const regex = /^\+380\d{9}$/;
+            if (!regex.test(formData.get('phone'))) {
+                showThanksModal(message.wrongNumber);
+                form.reset();
+                statusMessage.remove();
+            } else {
+                const object = {};  //for JSON
+                formData.forEach(function(value, key){ //for JSON
+                    object[key] = value;
+                });
+                const json = JSON.stringify(object);    //for JSON
+                request.send(json);
 
-            const object = {};  //for JSON
-            formData.forEach(function(value, key){ //for JSON
-                object[key] = value;
-            });
-            const json = JSON.stringify(object);    //for JSON
-
-            request.send(json);
-            // request.send(formData);
-
-            request.addEventListener('load', () => {
-                if (request.status === 200) {
-                    console.log(request.response);
-                    showThanksModal(message.success);
-                    form.reset();
-                    statusMessage.remove();
-                } else {
-                    showThanksModal(message.failure);
-                }
-            });
+                request.addEventListener('load', () => {
+                    if (request.status === 200) {
+                        showThanksModal(message.success);
+                        form.reset();
+                        statusMessage.remove();
+                    } else {
+                        showThanksModal(message.failure);
+                    }
+                });
+            }
         });
     }
-
     function showThanksModal(message) {
         const prevModalDialog = document.querySelector('.modal__dialog');
-
         prevModalDialog.classList.add("hide");
         openModal();
-
         const thanksModal = document.createElement('div');
         thanksModal.classList.add('modal__dialog');
         thanksModal.innerHTML = `
@@ -285,9 +287,7 @@ window.addEventListener('DOMContentLoaded', function() {
             thanksModal.remove();
             prevModalDialog.classList.add("show");
             prevModalDialog.classList.remove("hide");
-
             closeModal();
         },4000);
-
     }
 });

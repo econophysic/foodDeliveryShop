@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru-RU">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
     <title>Food</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="notranslate">
 <header class="header">
     <div class="header__left-block">
         <div class="header__logo">
@@ -195,7 +196,7 @@
         <div class="title">Заказывай пробный день прямо сейчас!</div>
         <form action="#" class="order__form">
             <input required placeholder="Ваше имя" name="name" type="text" class="order__input">
-            <input required placeholder="Ваш номер телефона" name="phone" type="phone" class="order__input">
+            <input required placeholder="Ваш номер телефона" name="phone" class="order__input tel">
             <img src="icons/right.svg" alt="right">
             <button class="btn btn_dark btn_min">Перезвонить мне</button>
         </form>
@@ -265,7 +266,7 @@
                 <div class="modal__close" data-close>&times;</div>
                 <div class="modal__title">Мы свяжемся с вами как можно быстрее!</div>
                 <input required placeholder="Ваше имя" name="name" type="text" class="modal__input">
-                <input required placeholder="Ваш номер телефона" name="phone" type="phone" class="modal__input">
+                <input required placeholder="Ваш номер телефона" name="phone" type="tel" class="modal__input tel">
                 <button class="btn btn_dark btn_min">Перезвонить мне</button>
             </form>
         </div>
