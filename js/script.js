@@ -27,9 +27,9 @@ window.addEventListener('DOMContentLoaded', function() {
     hideTabContent();
     showTabContent();
 
-    tabsParent.addEventListener('click', function(event) {
+    tabsParent.addEventListener('click', function (event) {
         const target = event.target;
-        if(target && target.classList.contains('tabheader__item')) {
+        if (target && target.classList.contains('tabheader__item')) {
             tabs.forEach((item, i) => {
                 if (target === item) {
                     hideTabContent();
@@ -42,15 +42,15 @@ window.addEventListener('DOMContentLoaded', function() {
     // Timer
 
     // const deadline = '2021-12-12' ;
-    const fakeTime = ((Math.random()*12+12) *60*60*1000);// 12-24 hours
-    const deadline = Date.now() + fakeTime ;
+    const fakeTime = ((Math.random() * 12 + 12) * 60 * 60 * 1000);// 12-24 hours
+    const deadline = Date.now() + fakeTime;
 
     function getTimeRemaining(endtime) {
         const t = (endtime) - new Date(),
-            days = Math.floor( (t/(1000*60*60*24))),
-            seconds = Math.floor( (t/1000) % 60 ),
-            minutes = Math.floor( (t/1000/60) % 60 ),
-            hours = Math.floor( (t/(1000*60*60) % 24) );
+            days = Math.floor((t / (1000 * 60 * 60 * 24))),
+            seconds = Math.floor((t / 1000) % 60),
+            minutes = Math.floor((t / 1000 / 60) % 60),
+            hours = Math.floor((t / (1000 * 60 * 60) % 24));
 
         return {
             'total': t,
@@ -61,7 +61,7 @@ window.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    function getZero(num){
+    function getZero(num) {
         if (num >= 0 && num < 10) {
             return '0' + num;
         } else {
@@ -119,7 +119,7 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     modal.addEventListener('click', (e) => {
-        if (e.target === modal || e.target.getAttribute ('data-close') === "") {
+        if (e.target === modal || e.target.getAttribute('data-close') === "") {
             closeModal();
         }
     });
@@ -131,6 +131,7 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
     const modalTimerId = setTimeout(openModal, 300000);
+
     // Изменил значение, чтобы не отвлекало
 
     function showModalByScroll() {
@@ -139,6 +140,7 @@ window.addEventListener('DOMContentLoaded', function() {
             window.removeEventListener('scroll', showModalByScroll);
         }
     }
+
     window.addEventListener('scroll', showModalByScroll);
 
     // Используем классы для создание карточек меню
@@ -228,47 +230,48 @@ window.addEventListener('DOMContentLoaded', function() {
     function postData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-
             let statusMessage = document.createElement('img');
-            statusMessage.src = message.loading ;               // set atr
+            statusMessage.src = message.loading;
             statusMessage.style.cssText = `
                 display: block;
                 margin: 0 auto;
             `;
-            //form.appendChild(statusMessage);
-            form.insertAdjacentElement('afterend',statusMessage);
-
-
-            const request = new XMLHttpRequest();
-            request.open('POST', 'server.php');
-            request.setRequestHeader('Content-type', 'application/json; charset=utf-8');//for JSON
+            form.insertAdjacentElement('afterend', statusMessage);
             const formData = new FormData(form);
-            /*Check true or false number*/
+
+            const object = {};
+            formData.forEach(function(value, key){
+                object[key] = value;
+            });
+
             const regex = /^\+380\d{9}$/;
-            if (!regex.test(formData.get('phone'))) {
-                showThanksModal(message.wrongNumber);
+            // if (!regex.test(formData.get('phone'))) {
+            //     showThanksModal(message.wrongNumber);
+            //     form.reset();
+            //     statusMessage.remove();
+            //
+            fetch('server.php', {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(object)
+            })
+            .then(data => data.text())
+            .then(data => {
+                console.log(data);
+                showThanksModal(message.success);
                 form.reset();
                 statusMessage.remove();
-            } else {
-                const object = {};  //for JSON
-                formData.forEach(function(value, key){ //for JSON
-                    object[key] = value;
-                });
-                const json = JSON.stringify(object);    //for JSON
-                request.send(json);
+            }).catch(()=>{
+                showThanksModal(message.failure);
+            }).finally(()=>{
+                form.reset();
+            });
 
-                request.addEventListener('load', () => {
-                    if (request.status === 200) {
-                        showThanksModal(message.success);
-                        form.reset();
-                        statusMessage.remove();
-                    } else {
-                        showThanksModal(message.failure);
-                    }
-                });
-            }
-        });
+        })
     }
+
     function showThanksModal(message) {
         const prevModalDialog = document.querySelector('.modal__dialog');
         prevModalDialog.classList.add("hide");
