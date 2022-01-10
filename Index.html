@@ -6,6 +6,7 @@
     <meta name="google" content="notranslate">
     <title>Food</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/test.js" defer> </script>
 </head>
 <body class="notranslate">
 <header class="header">
@@ -150,9 +151,9 @@
                 Ваша конституция
             </div>
             <div class="calculating__choose calculating__choose_medium">
-                <input type="text" id="height" placeholder="Введите рост" class="calculating__choose-item">
-                <input type="text" id="weight" placeholder="Введите вес"  class="calculating__choose-item">
-                <input type="text" id="age" placeholder="Введите возраст" class="calculating__choose-item">
+                <label for="height"></label><input type="text" id="height" placeholder="Введите рост" class="calculating__choose-item">
+                <label for="weight"></label><input type="text" id="weight" placeholder="Введите вес" class="calculating__choose-item">
+                <label for="age"></label><input type="text" id="age" placeholder="Введите возраст" class="calculating__choose-item">
             </div>
 
             <div class="calculating__subtitle">
@@ -195,8 +196,12 @@
     <div class="container">
         <div class="title">Заказывай пробный день прямо сейчас!</div>
         <form action="#" class="order__form">
-            <input required placeholder="Ваше имя" name="name" type="text" class="order__input">
-            <input required placeholder="Ваш номер телефона" name="phone" class="order__input tel">
+            <label>
+                <input required placeholder="Ваше имя" name="name" type="text" class="order__input">
+            </label>
+            <label>
+                <input required placeholder="Ваш номер телефона" name="phone" class="order__input tel">
+            </label>
             <img src="icons/right.svg" alt="right">
             <button class="btn btn_dark btn_min">Перезвонить мне</button>
         </form>
@@ -265,8 +270,12 @@
             <form action="#">
                 <div class="modal__close" data-close>&times;</div>
                 <div class="modal__title">Мы свяжемся с вами как можно быстрее!</div>
-                <input required placeholder="Ваше имя" name="name" type="text" class="modal__input">
-                <input required placeholder="Ваш номер телефона" name="phone" type="tel" class="modal__input tel">
+                <label>
+                    <input required placeholder="Ваше имя" name="name" type="text" class="modal__input">
+                </label>
+                <label>
+                    <input required placeholder="Ваш номер телефона" name="phone" type="tel" class="modal__input tel">
+                </label>
                 <button class="btn btn_dark btn_min">Перезвонить мне</button>
             </form>
         </div>

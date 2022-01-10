@@ -42,15 +42,15 @@ window.addEventListener('DOMContentLoaded', function() {
     // Timer
 
     // const deadline = '2021-12-12' ;
-    const fakeTime = ((Math.random() * 12 + 12) * 60 * 60 * 1000);// 12-24 hours
+    const fakeTime = (Math.random() * 12 + 12) * 60 * 60 * 1000;// 12-24 hours
     const deadline = Date.now() + fakeTime;
 
     function getTimeRemaining(endtime) {
-        const t = (endtime) - new Date(),
-            days = Math.floor((t / (1000 * 60 * 60 * 24))),
-            seconds = Math.floor((t / 1000) % 60),
-            minutes = Math.floor((t / 1000 / 60) % 60),
-            hours = Math.floor((t / (1000 * 60 * 60) % 24));
+        const t = endtime - new Date(),
+            days = Math.floor(t / (1000 * 60 * 60 * 24)),
+            seconds = Math.floor(t / 1000 % 60),
+            minutes = Math.floor(t / 1000 / 60 % 60),
+            hours = Math.floor(t / (1000 * 60 * 60) % 24);
 
         return {
             'total': t,
@@ -72,7 +72,7 @@ window.addEventListener('DOMContentLoaded', function() {
     function setClock(selector, endtime) {
 
         const timer = document.querySelector(selector),
-            days = timer.querySelector("#days"),
+            days = timer.querySelector('#days'),
             hours = timer.querySelector('#hours'),
             minutes = timer.querySelector('#minutes'),
             seconds = timer.querySelector('#seconds'),
@@ -119,13 +119,13 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     modal.addEventListener('click', (e) => {
-        if (e.target === modal || e.target.getAttribute('data-close') === "") {
+        if (e.target === modal || e.target.getAttribute('data-close') === '') {
             closeModal();
         }
     });
 
     document.addEventListener('keydown', (e) => {
-        if (e.code === "Escape" && modal.classList.contains('show')) {
+        if (e.code === 'Escape' && modal.classList.contains('show')) {
             closeModal();
         }
     });
@@ -166,7 +166,7 @@ window.addEventListener('DOMContentLoaded', function() {
             const element = document.createElement('div');
 
             if (this.classes.length === 0) {
-                this.classes = "menu__item";
+                this.classes = 'menu__item';
                 element.classList.add(this.classes);
             } else {
                 this.classes.forEach(className => element.classList.add(className));
@@ -187,30 +187,35 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     new MenuCard(
-        "img/tabs/vegy.jpg",
-        "vegy",
+        'img/tabs/vegy.jpg',
+        'vegy',
         'Меню "Фитнес"',
-        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов.' +
+        ' Продукт активных и здоровых людей. ' +
+        'Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
         9,
-        ".menu .container"
+        '.menu .container'
     ).render();
 
     new MenuCard(
-        "img/tabs/post.jpg",
-        "post",
+        'img/tabs/post.jpg',
+        'post',
         'Меню "Постное"',
-        'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
+        'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного ' +
+        'происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков' +
+        ' за счет тофу и импортных вегетарианских стейков.',
         14,
-        ".menu .container"
+        '.menu .container'
     ).render();
 
     new MenuCard(
-        "img/tabs/elite.jpg",
-        "elite",
+        'img/tabs/elite.jpg',
+        'elite',
         'Меню “Премиум”',
-        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. ' +
+        'Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
         21,
-        ".menu .container"
+        '.menu .container'
     ).render();
 
     // Forms
@@ -244,14 +249,14 @@ window.addEventListener('DOMContentLoaded', function() {
                 object[key] = value;
             });
 
-            const regex = /^\+380\d{9}$/;
+            //const regex = /^\+380\d{9}$/;
             // if (!regex.test(formData.get('phone'))) {
             //     showThanksModal(message.wrongNumber);
             //     form.reset();
             //     statusMessage.remove();
             //
             fetch('server.php', {
-                method: "POST",
+                method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
                 },
@@ -263,9 +268,9 @@ window.addEventListener('DOMContentLoaded', function() {
                 showThanksModal(message.success);
                 form.reset();
                 statusMessage.remove();
-            }).catch(()=>{
+            }).catch( () => {
                 showThanksModal(message.failure);
-            }).finally(()=>{
+            }).finally(() => {
                 form.reset();
             });
 
@@ -274,23 +279,26 @@ window.addEventListener('DOMContentLoaded', function() {
 
     function showThanksModal(message) {
         const prevModalDialog = document.querySelector('.modal__dialog');
-        prevModalDialog.classList.add("hide");
+        prevModalDialog.classList.add('hide');
         openModal();
         const thanksModal = document.createElement('div');
         thanksModal.classList.add('modal__dialog');
         thanksModal.innerHTML = `
-            <div class = "modal__content">
-                <div class="modal__close" data-close>×</div>
-                <div class="modal__title">${message}</div>
+            <div class = 'modal__content'>
+                <div class='modal__close' data-close>×</div>
+                <div class='modal__title'>${message}</div>
             </div>
         `;
 
         document.querySelector('.modal').append(thanksModal);
-        setTimeout(()=>{
+        setTimeout(() => {
             thanksModal.remove();
-            prevModalDialog.classList.add("show");
-            prevModalDialog.classList.remove("hide");
+            prevModalDialog.classList.add('show');
+            prevModalDialog.classList.remove('hide');
             closeModal();
         },4000);
     }
+    fetch('http://localhost:3000/menu')
+        .then(data => data.json())
+        .then(res => console.log(res));
 });
