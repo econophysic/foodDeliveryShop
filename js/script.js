@@ -41,7 +41,6 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // Timer
 
-    // const deadline = '2021-12-12' ;
     const fakeTime = (Math.random() * 12 + 12) * 60 * 60 * 1000;// 12-24 hours
     const deadline = Date.now() + fakeTime;
 
@@ -132,8 +131,6 @@ window.addEventListener('DOMContentLoaded', function() {
 
     const modalTimerId = setTimeout(openModal, 300000);
 
-    // Изменил значение, чтобы не отвлекало
-
     function showModalByScroll() {
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
             openModal();
@@ -142,6 +139,8 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     window.addEventListener('scroll', showModalByScroll);
+
+    //Form
 
     class MenuCard {
         constructor(src, alt, title, descr, price, parentSelector, ...classes) {
@@ -184,7 +183,6 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-
     const getResourse = async (url) => {
         const res = await fetch(url);
         if (!res.ok){
@@ -192,47 +190,14 @@ window.addEventListener('DOMContentLoaded', function() {
         }
         return await res.json();
     }
-    /*createCardWithoutClass(data){
-    getResourse(' http://localhost:3000/menu')
-        .then(data => createCardWithoutClass(data));
-    function createCardWithoutClass(data){
-        data.forEach(({ img, altimg, title,descr,price, }) => {
-             const element = document.createElement('div');
-             element.classList.add('menu__item');
-             element.innerHTML =`
-                <img src=${img} alt=${altimg}>
-                <h3 class="menu__item-subtitle">${title}</h3>
-                <div class="menu__item-descr">${descr}</div>
-                <div class="menu__item-divider"></div> 
-                <div class="menu__item-price">
-                    <div class="menu__item-cost">Цена:</div>
-                    <div class="menu__item-total"><span>${price}</span> грн/день</div>
-                </div>
-             `;
-             document.querySelector('.menu .container').append(element);
-``
-        });
-    }*/
 
     getResourse(' http://localhost:3000/menu')
         .then(data => {
-/*            data.forEach(obj =>{
-               new MenuCard(obj.img, obj.altimg, obj.title, obj.descr, obj.price).render();
-            });*/ //destructurization
             data.forEach(({ img, altimg, title,descr,price, }) => {
                 new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
             });
         });
 
-    /*Get Resourse with Library
-    axios.get(' http://localhost:3000/menu')
-        .then(data => {
-            data.data.forEach(({ img, altimg, title,descr,price, }) => {
-                new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
-            });
-        });*/
-
-    //Forms
     const forms = document.querySelectorAll('form');
     const message = {
         loading: 'img/form/spinner.svg',
@@ -309,4 +274,53 @@ window.addEventListener('DOMContentLoaded', function() {
     fetch('http://localhost:3000/menu')
         .then(data => data.json())
         .then(res => console.log(res));
+
+    //Slider
+
+    const slides = document.querySelectorAll('.offer__slide'),
+        next = document.querySelector('.offer__slider-next'),
+        prev = document.querySelector('.offer__slider-prev'),
+        total = document.getElementById('total'),
+        current = document.getElementById('current');
+
+    let slideIndex = 1;
+
+    showSlides(slideIndex);
+
+    if (slides.length < 10){
+        total.textContent = `0${slides.length}`;
+    } else {
+        total.textContent = slides.length;
+    }
+
+    function showSlides(n) {
+        if (n > slides.length){
+            slideIndex = 1;
+        }
+        if (n < 1){
+            slideIndex = slides.length;
+        }
+
+        slides.forEach(item => item.style.display = 'none');
+        slides[slideIndex - 1].style.display = 'block';
+
+        if (slides.length < 10){
+            current.textContent = `0${slideIndex}`;
+        } else {
+            current.textContent = slideIndex;
+        }
+    }
+
+    function plusSlides(n){
+        showSlides(slideIndex += n);
+    }
+
+    prev.addEventListener('click',() => {
+         plusSlides(-1);
+    });
+
+    next.addEventListener('click',() => {
+        plusSlides(1);
+    });
+
 });
