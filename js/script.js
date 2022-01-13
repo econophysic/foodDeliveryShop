@@ -202,8 +202,7 @@ window.addEventListener('DOMContentLoaded', function() {
     const message = {
         loading: 'img/form/spinner.svg',
         success: 'Спасибо! Скоро мы с вами свяжемся',
-        failure: 'Что-то пошло не так...',
-        wrongNumber: 'Номер введен с ошибкой'
+        failure: 'Что-то пошло не так...'
     };
 
     forms.forEach(item => {
@@ -225,29 +224,34 @@ window.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             let statusMessage = document.createElement('img');
-            statusMessage.src = message.loading;
+            if (!statusMessage.src === message.loading) {               //bugFixed
+                statusMessage.src = message.loading;
+            }
             statusMessage.style.cssText = `
                 display: block;
                 margin: 0 auto;
             `;
             form.insertAdjacentElement('afterend', statusMessage);
             const formData = new FormData(form);
-
             const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-             postData('http://localhost:3000/requests',json)
-            .then(data => {
-                console.log(data);
-                showThanksModal(message.success);
-                form.reset();
-                statusMessage.remove();
-            }).catch( () => {
-                showThanksModal(message.failure);
-            }).finally(() => {
-                form.reset();
-            });
-
-        })
+            const regex = /^\+380\d{9}$/;
+             postData('http://localhost:3000/requests', json)
+                 .then(data => {
+                     if (!regex.test(formData.get('phone'))) {
+                        throw ('Tel number incorrect');
+                     }
+                    console.log(data);
+                    form.reset();
+                    showThanksModal(message.success);
+                    statusMessage.remove();
+                }).catch((er) => {
+                    showThanksModal(message.failure);
+                    console.error(er);
+                }).finally(() => {
+                    form.reset();
+                });
+        });
     }
 
     function showThanksModal(message) {
