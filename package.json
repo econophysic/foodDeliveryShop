@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/econophysic/foodShop#readme",
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "json-server": "^0.17.0"
   }
 }
